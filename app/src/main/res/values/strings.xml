@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">CTOS</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="error_permission_localisation">Please allow this application to access your localisation.</string>
+    <string name="error_permission_storage">Please allow this application to access your SD card.</string>
+    <string name="error_availability_storage">Please check your SD card.</string>
+    <string name="button_switch_format">Switch format</string>
+    <string name="button_share_position">Share position</string>
+    <string name="button_view_map">Log</string>
+    <string name="geo_wgs84">WGS84</string>
+    <string name="provider_new_status">The provider %1$s has now a new status %2$s</string>
+    <string name="provider_disabled">The provider %s is now disabled</string>
+    <string name="provider_enabled">The provider %s is now enabled</string>
+    <string name="template">Latitude : \nLongitude : \nAccuracy (m) : \nAltitude (m) : \nSpeed : \nUTC Time : \nProvider :&#160;</string>
+    <string name="result">%1$s\n%2$s\n%3$s\n%4$s\n%5$s\n%6$s\n%7$s</string>
+    <string name="send_to">Share position with &#8230;</string>
+    <string name="gmaps_url">https://maps.google.com/?q=%1$s,%2$s</string>
+    <string name="service_start">Logging service started</string>
+    <string name="service_stop">Logging service stopped</string>
+    <string name="service_connected">Logging service connected</string>
+    <string name="service_disconnected">Logging service disconnected</string>
+    <string name="logging_service">Logging GPS position &#8230;</string>
+    <string name="gpx_header">&#60;?xml version="1.0" encoding="UTF-8" standalone="yes"?&#62;\n
+    &#60;gpx  xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="CTOS"&#62;
+        \n&#60;trk&#62;\n&#60;trkseg&#62;</string>
+    <string name="gpx_footer">&#60;/trkseg&#62;\n&#60;/trk&#62;\n&#60;/gpx&#62;</string>
+    <string name="gpx_trkpt">&#60;trkpt lon="%1$s" lat="%2$s"&#62;\n
+    &#60;ele&#62;%3$s&#60;/ele&#62;\n
+    &#60;time&#62;%4$s&#60;/time&#62;\n
+    &#60;speed&#62;%5$s&#60;/speed&#62;\n
+    &#60;/trkpt&#62;</string>
+    <string name="filename">CTOS_track_</string>
+</resources>
