@@ -20,14 +20,14 @@
     <string name="service_connected">Logging service connected</string>
     <string name="service_disconnected">Logging service disconnected</string>
     <string name="logging_service">Logging GPS position &#8230;</string>
-    <string name="gpx_header">&#60;?xml version="1.0" encoding="UTF-8" standalone="yes"?&#62;\n
-    &#60;gpx  xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="CTOS"&#62;
-        \n&#60;trk&#62;\n&#60;trkseg&#62;</string>
-    <string name="gpx_footer">&#60;/trkseg&#62;\n&#60;/trk&#62;\n&#60;/gpx&#62;</string>
-    <string name="gpx_trkpt">&#60;trkpt lon="%1$s" lat="%2$s"&#62;\n
-    &#60;ele&#62;%3$s&#60;/ele&#62;\n
-    &#60;time&#62;%4$s&#60;/time&#62;\n
-    &#60;speed&#62;%5$s&#60;/speed&#62;\n
-    &#60;/trkpt&#62;</string>
+    <string name="gpx_header">&lt;?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?&gt;\n
+        &lt;gpx  xmlns=\"http://www.topografix.com/GPX/1/1\" version=\"1.1\" creator=\"CTOS\"&gt;\n\t
+        &lt;trk&gt;\n\t\t&lt;trkseg&gt;</string>
+    <string name="gpx_footer">\n\t\t&lt;/trkseg&gt;\n\t&lt;/trk&gt;\n&lt;/gpx&gt;</string>
+    <string name="gpx_trkpt">\n\t\t\t&lt;trkpt lon=\"%1$s\" lat=\"%2$s\"&gt;\n\t\t\t\t
+        &lt;ele&gt;%3$s&lt;/ele&gt;\n\t\t\t\t
+        &lt;time&gt;%4$s&lt;/time&gt;\n\t\t\t\t
+        &lt;speed&gt;%5$s&lt;/speed&gt;\n\t\t\t
+        &lt;/trkpt&gt;</string>
     <string name="filename">CTOS_track_</string>
 </resources>

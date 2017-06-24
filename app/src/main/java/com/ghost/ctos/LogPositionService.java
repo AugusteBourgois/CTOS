@@ -187,7 +187,7 @@ public class LogPositionService extends Service implements LocationListener {
     }
 
     private void createGPXFile(){
-        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+        String currentDateTimeString = new SimpleDateFormat("yyyy-MM-dd'_'HH:mm:ss").format(new Date());
         filename = getResources().getString(R.string.filename)+currentDateTimeString+".gpx";
         File file;
         FileOutputStream outputStream;
