@@ -9,14 +9,23 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/pin"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:launchMode="singleTop">
-        <activity android:name=".MainActivity">
+        android:supportsRtl="true">
+        <activity android:name=".GPSActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/title_activity_gps"
+            android:launchMode="singleTop"
+            />
+        <activity android:name=".VRActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/title_activity_vr"
+            android:launchMode="singleTop"
+            />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -24,7 +33,7 @@
         <service
             android:name=".LogPositionService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
     </application>
 
 </manifest>

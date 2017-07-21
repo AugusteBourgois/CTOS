@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,7 +24,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class LogPositionService extends Service implements LocationListener {
@@ -30,7 +31,8 @@ public class LogPositionService extends Service implements LocationListener {
     private NotificationManager mNM;
     private LocationManager lm;
     private int NOTIFICATION = R.string.service_start;
-    private boolean permission;
+    private static final String PREFS_NAME = "ctos_preference";
+    NotificationCompat.Builder notification;
 
     private double latitude;
     private double longitude;
@@ -38,13 +40,12 @@ public class LogPositionService extends Service implements LocationListener {
     private long time;
     private float speed;
     private String filename;
+    private int number = 0;
 
     @Override
     public void onCreate() {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        if(!permission) {
-            this.checkServicePermissions();
-        }
+        this.startLoggingService();
     }
 
     @Override
@@ -60,13 +61,15 @@ public class LogPositionService extends Service implements LocationListener {
 
     @Override
     public void onDestroy() {
-        // Cancel the persistent notification.
-        mNM.cancel(NOTIFICATION);
+        lm.removeUpdates(this);
+        closeGPXFile();
 
-        if(permission){
-            lm.removeUpdates(this);
-            closeGPXFile();
-        }
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("logging",false);
+        editor.apply();
+
+        stopForeground(true);
 
         // Tell the user we stopped.
         Toast.makeText(this, R.string.service_stop, Toast.LENGTH_SHORT).show();
@@ -80,6 +83,12 @@ public class LogPositionService extends Service implements LocationListener {
         speed = location.getSpeed();
         time = location.getTime();
         writeGPX(formatGPX());
+        // Update the number of logged positions
+        notification.setNumber(++number);
+        Notification not = notification.build();
+        not.flags = Notification.FLAG_ONGOING_EVENT;
+        // Send the notification.
+        mNM.notify(NOTIFICATION, not);
     }
 
     @Override
@@ -88,6 +97,7 @@ public class LogPositionService extends Service implements LocationListener {
                 getResources().getString(R.string.provider_disabled), provider);
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
@@ -96,6 +106,39 @@ public class LogPositionService extends Service implements LocationListener {
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+    private void startLoggingService(){
+        PackageManager pm = this.getPackageManager();
+        int fine = pm.checkPermission(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                this.getPackageName());
+        int sd_w = pm.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                this.getPackageName());
+        int sd_r = pm.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
+                this.getPackageName());
+        if (fine != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, R.string.error_permission_localisation, Toast.LENGTH_SHORT).show();
+            this.stopSelf();
+        }else if(sd_r != PackageManager.PERMISSION_GRANTED ||
+                sd_w != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, R.string.error_permission_storage, Toast.LENGTH_SHORT).show();
+            this.stopSelf();
+        }else if(!isSDW() || !isSDR()){
+            Toast.makeText(this, R.string.error_availability_storage, Toast.LENGTH_SHORT).show();
+            this.stopSelf();
+        }else{
+            lm = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+            if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, this);
+            }
+            showNotification();
+            createGPXFile();
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("logging",true);
+            editor.apply();
+        }
+    }
 
     private void showNotification() {
         Toast.makeText(this, R.string.service_start, Toast.LENGTH_SHORT).show();
@@ -107,60 +150,19 @@ public class LogPositionService extends Service implements LocationListener {
                 new Intent(this, MainActivity.class), 0);
 
         // Set the info for the views that show in the notification panel.
-        Notification notification = new Notification.Builder(this)
+        notification = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.pin)  // the status icon
                 .setTicker(text)  // the status text
                 .setWhen(System.currentTimeMillis())  // the time stamp
                 .setContentTitle(getText(R.string.logging_service))  // the label of the entry
                 .setContentText(text)  // the contents of the entry
-                .setContentIntent(contentIntent)  // The intent to send when the entry is clicked
-                .build();
+                .setNumber(number)
+                .setContentIntent(contentIntent);  // The intent to send when the entry is clicked
+        Notification not = notification.build();
+        not.flags = Notification.FLAG_ONGOING_EVENT;
 
         // Send the notification.
-        mNM.notify(NOTIFICATION, notification);
-    }
-
-    private void checkServicePermissions(){
-        if(permission){
-            lm = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-            if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
-                    lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, this);
-                lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60000, 0, this);
-            }
-            showNotification();
-            createGPXFile();
-        }else{
-            PackageManager pm = this.getPackageManager();
-            int fine = pm.checkPermission(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    this.getPackageName());
-            int coarse = pm.checkPermission(
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                    this.getPackageName());
-            int sd_w = pm.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    this.getPackageName());
-            int sd_r = pm.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
-                    this.getPackageName());
-            if (fine != PackageManager.PERMISSION_GRANTED ||
-                    coarse != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, R.string.error_permission_localisation, Toast.LENGTH_SHORT).show();
-                permission = false;
-                this.stopSelf();
-            }else if(sd_r != PackageManager.PERMISSION_GRANTED ||
-                    sd_w != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, R.string.error_permission_storage, Toast.LENGTH_SHORT).show();
-                permission = false;
-                this.stopSelf();
-            }else if(!isSDW() || !isSDR()){
-                Toast.makeText(this, R.string.error_availability_storage, Toast.LENGTH_SHORT).show();
-                permission = false;
-                this.stopSelf();
-            }else{
-                permission = true;
-                checkServicePermissions();
-            }
-        }
+        startForeground(NOTIFICATION, not);
     }
 
     private String formatGPX(){

@@ -10,62 +10,59 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.ghost.ctos.MainActivity">
 
-    <Button
-        android:id="@+id/button_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/button_switch_format"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/button_share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/button_switch"
-        android:text="@string/button_share_position"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/button_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/button_share"
-        android:text="@string/button_view_map"
-        android:textSize="12sp" />
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/button_switch"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
-        <TextView
-            android:id="@+id/template"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.17"
-            android:lineSpacingExtra="8sp"
-            android:text="@string/template"
-            android:textAlignment="textEnd"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:lineSpacingExtra="8sp"
-            android:text="@string/result"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/textView_gps"
+                    android:layout_width="220dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:text="@string/gps_description"
+                    android:textAlignment="viewEnd" />
+
+                <Button
+                    android:id="@+id/button_gps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_gps" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/textView_vr"
+                    android:layout_width="220dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:text="@string/vr_description"
+                    android:textAlignment="viewEnd" />
+
+                <Button
+                    android:id="@+id/button_vr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_vr" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

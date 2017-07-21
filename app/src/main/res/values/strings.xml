@@ -1,13 +1,16 @@
 <resources>
-    <string name="app_name">CTOS</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">CTOS</string>
+    <string name="title_activity_gps">Position logging and sharing</string>
+    <string name="title_activity_vr">VR compass</string>
     <string name="error_permission_localisation">Please allow this application to access your localisation.</string>
     <string name="error_permission_storage">Please allow this application to access your SD card.</string>
     <string name="error_availability_storage">Please check your SD card.</string>
     <string name="button_switch_format">Switch format</string>
     <string name="button_share_position">Share position</string>
-    <string name="button_view_map">Log</string>
-    <string name="geo_wgs84">WGS84</string>
+    <string name="button_log_on">Start logging</string>
+    <string name="button_log_off">Stop logging</string>
+    <string name="button_gps">GPS data</string>
+    <string name="button_vr">VR compass</string>
     <string name="provider_new_status">The provider %1$s has now a new status %2$s</string>
     <string name="provider_disabled">The provider %s is now disabled</string>
     <string name="provider_enabled">The provider %s is now enabled</string>
@@ -17,8 +20,6 @@
     <string name="gmaps_url">https://maps.google.com/?q=%1$s,%2$s</string>
     <string name="service_start">Logging service started</string>
     <string name="service_stop">Logging service stopped</string>
-    <string name="service_connected">Logging service connected</string>
-    <string name="service_disconnected">Logging service disconnected</string>
     <string name="logging_service">Logging GPS position &#8230;</string>
     <string name="gpx_header">&lt;?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?&gt;\n
         &lt;gpx  xmlns=\"http://www.topografix.com/GPX/1/1\" version=\"1.1\" creator=\"CTOS\"&gt;\n\t
@@ -30,4 +31,8 @@
         &lt;speed&gt;%5$s&lt;/speed&gt;\n\t\t\t
         &lt;/trkpt&gt;</string>
     <string name="filename">CTOS_track_</string>
+    <string name="gps_description">This activity enables you to read your positioning data, share it,
+    and log it in a GPX file for further use.</string>
+    <string name="vr_description">This activity is a Virtual Reality compass. It displays an artificial
+    horizon on a video camera feed.</string>
 </resources>
