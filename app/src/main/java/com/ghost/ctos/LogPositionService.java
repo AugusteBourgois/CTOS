@@ -93,8 +93,7 @@ public class LogPositionService extends Service implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
-        String msg = String.format(
-                getResources().getString(R.string.provider_disabled), provider);
+        String msg = getResources().getString(R.string.error_provider_disabled);
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

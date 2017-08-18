@@ -2,6 +2,7 @@ package com.ghost.ctos;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,11 +10,15 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +40,7 @@ public class GPSActivity extends Activity implements LocationListener {
 
     private boolean permission;
     private int format;
+    private int unit;
     private Context context;
 
     private static final String PREFS_NAME = "ctos_preference";
@@ -42,7 +48,15 @@ public class GPSActivity extends Activity implements LocationListener {
     private static final int DMM = Location.FORMAT_MINUTES;
     private static final int DMS = Location.FORMAT_SECONDS;
 
-    TextView wgs84_res;
+    private static final int MS = 0;
+    private static final int KMH = 1;
+    private static final int MPH = 2;
+    private static final int NMPH = 3;
+    private static final double KMH_U = 3.6;
+    private static final double MPH_U = 3600/1609.344;
+    private static final double NMPH_U = 3600/1852;
+
+    TextView textview_result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,20 +65,24 @@ public class GPSActivity extends Activity implements LocationListener {
         setContentView(R.layout.activity_gps);
 
         // Load the text display
-        wgs84_res = (TextView) findViewById(R.id.result);
+        textview_result = (TextView) findViewById(R.id.textview_result);
 
         // Store the context for later use in objects
         context = this;
 
-        // Implement the first button to switch display
-        final Button button1 = (Button) findViewById(R.id.button_switch);
+        // Implement the second button to open the tracks directory
+        final Button button1 = (Button) findViewById(R.id.button_open);
         button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Switch between the 3 display modes
-                format += 1;
-                format %= 3;
-                // Update immediately the display
-                updateDisplay();
+                Uri selectedUri = Uri.parse(Environment.DIRECTORY_DOCUMENTS);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(selectedUri, "resource/*");
+                if (intent.resolveActivityInfo(getPackageManager(), 0) != null){
+                    startActivity(intent);
+                }else{
+                    String msg = getResources().getString(R.string.error_file_explorer);
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -124,6 +142,7 @@ public class GPSActivity extends Activity implements LocationListener {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         boolean logging = settings.getBoolean("logging",false);
         format = settings.getInt("format", DMS);
+        unit = settings.getInt("unit", KMH);
         latitude = settings.getFloat("latitude", 0);
         longitude = settings.getFloat("longitude", 0);
         altitude = settings.getFloat("altitude", 0);
@@ -140,6 +159,35 @@ public class GPSActivity extends Activity implements LocationListener {
         }else{
             button3.setText(getResources().getString(R.string.button_log_on));
         }
+
+        RadioGroup g1 = (RadioGroup)findViewById(R.id.radioGroup_coord);
+        switch(format){
+            case DDD:
+                g1.check(R.id.lat_lon_ddd);
+                break;
+            case DMM:
+                g1.check(R.id.lat_lon_dmm);
+                break;
+            case DMS:
+                g1.check(R.id.lat_lon_dms);
+                break;
+        }
+
+        RadioGroup g2 = (RadioGroup)findViewById(R.id.radioGroup_speed);
+        switch(format){
+            case MS:
+                g1.check(R.id.speed_ms);
+                break;
+            case KMH:
+                g1.check(R.id.speed_kmh);
+                break;
+            case MPH:
+                g1.check(R.id.speed_mph);
+                break;
+            case NMPH:
+                g1.check(R.id.speed_nmph);
+                break;
+        }
     }
 
     @Override
@@ -154,6 +202,7 @@ public class GPSActivity extends Activity implements LocationListener {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt("format", format);
+        editor.putInt("unit", unit);
         editor.putFloat("latitude", (float) latitude);
         editor.putFloat("longitude", (float) longitude);
         editor.putFloat("altitude", (float) altitude);
@@ -181,8 +230,7 @@ public class GPSActivity extends Activity implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
         // Tell the user that his GPS is disabled
-        String msg = String.format(
-                getResources().getString(R.string.provider_disabled), provider);
+        String msg = getResources().getString(R.string.error_provider_disabled);
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         // Open the GPS setting activity
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -198,10 +246,60 @@ public class GPSActivity extends Activity implements LocationListener {
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
+    public void onSwitchLatLon(View view){
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Switch between the 3 display modes
+        switch(view.getId()) {
+            case R.id.lat_lon_ddd:
+                if (checked)
+                    format =DDD;
+                break;
+            case R.id.lat_lon_dmm:
+                if (checked)
+                    format =DMM;
+                break;
+            case R.id.lat_lon_dms:
+                if (checked)
+                    format =DMS;
+                break;
+        }
+        // Update immediately the display
+        updateDisplay();
+    }
+
+    public void onSwitchSpeed(View view){
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.speed_ms:
+                if (checked)
+                    unit = MS;
+                break;
+            case R.id.speed_kmh:
+                if (checked)
+                    unit = KMH;
+                break;
+            case R.id.speed_mph:
+                if (checked)
+                    unit = MPH;
+                break;
+            case R.id.speed_nmph:
+                if (checked)
+                    unit = NMPH;
+                break;
+        }
+        // Update immediately the display
+        updateDisplay();
+    }
+
     // Update display immediately
     private void updateDisplay() {
-        String wgs84_txt = formatText();
-        wgs84_res.setText(wgs84_txt);
+        String text = formatText();
+        textview_result.setText(text);
     }
 
     // Format the text to display in the activity
@@ -230,11 +328,25 @@ public class GPSActivity extends Activity implements LocationListener {
                 lon += "\"";
                 break;
         }
-        alt = String.valueOf(altitude);
-        acc = String.valueOf(h_accuracy);
-        spe = String.valueOf(speed);
+        spe="";
+        switch (unit) {
+            case MS:
+                spe = String.valueOf(speed)+" m/s";
+                break;
+            case KMH:
+                spe = String.valueOf(speed*KMH_U)+" km/h";
+                break;
+            case MPH:
+                spe = String.valueOf(speed*MPH_U)+" mph";
+                break;
+            case NMPH:
+                spe = String.valueOf(speed*NMPH_U)+" knots";
+                break;
+        }
+        alt = String.valueOf(altitude)+" m";
+        acc = String.valueOf(h_accuracy)+" m";
         dte = new SimpleDateFormat("h:mm a dd.MM.yyyy").format(new Date(time));
-        return String.format(getResources().getString(R.string.result), lat, lon, acc, alt, spe, dte, provider);
+        return String.format(getResources().getString(R.string.textview_result), lat, lon, acc, alt, spe, dte, provider);
     }
 
     // Check activity's permissions to avoid errors
@@ -280,6 +392,8 @@ public class GPSActivity extends Activity implements LocationListener {
                     lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                 lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);
                 lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 0, this);
+            }else{
+                this.onProviderDisabled(LocationManager.GPS_PROVIDER);
             }
         }
     }

@@ -11,20 +11,10 @@
     tools:context="com.ghost.ctos.GPSActivity">
 
     <Button
-        android:id="@+id/button_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/button_switch_format"
-        android:textSize="12sp" />
-
-    <Button
         android:id="@+id/button_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/button_switch"
         android:text="@string/button_share_position"
         android:textSize="12sp" />
 
@@ -32,40 +22,159 @@
         android:id="@+id/button_log"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/button_share"
         android:text="@string/button_log_on"
         android:textSize="12sp" />
 
+    <Button
+        android:id="@+id/button_open"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/button_log"
+        android:text="@string/button_open_file"
+        android:textSize="12sp"/>
+
     <LinearLayout
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/button_switch"
-        android:layout_marginTop="5dp"
+        android:layout_below="@+id/button_share"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/template"
+            android:id="@+id/textview_template"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.17"
             android:lineSpacingExtra="8sp"
-            android:text="@string/template"
-            android:textAlignment="textEnd"
+            android:text="@string/textview_template"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/result"
+            android:id="@+id/textview_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:lineSpacingExtra="8sp"
-            android:text="@string/result"
+            android:text="@string/textview_result"
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linear_layout"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textview_switch_format"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/textview_switch_format"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textview_switch_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/radioGroup_coord"
+                    android:text="@string/textview_switch_speed"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"/>
+
+                <RadioGroup
+                    android:id="@+id/radioGroup_coord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textview_switch_format">
+
+                    <RadioButton
+                        android:id="@+id/lat_lon_ddd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:onClick="onSwitchLatLon"
+                        android:text="@string/rdb_lat_lon_ddd" />
+
+                    <RadioButton
+                        android:id="@+id/lat_lon_dmm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onSwitchLatLon"
+                        android:text="@string/rdb_lat_lon_dmm" />
+
+                    <RadioButton
+                        android:id="@+id/lat_lon_dms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onSwitchLatLon"
+                        android:text="@string/rdb_lat_lon_dms" />
+                </RadioGroup>
+
+                <RadioGroup
+                    android:id="@+id/radioGroup_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textview_switch_speed">
+
+                    <RadioButton
+                        android:id="@+id/speed_ms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:onClick="onSwitchSpeed"
+                        android:text="@string/rdb_speed_ms" />
+
+                    <RadioButton
+                        android:id="@+id/speed_kmh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onSwitchSpeed"
+                        android:text="@string/rdb_speed_kmh" />
+
+                    <RadioButton
+                        android:id="@+id/speed_mph"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onSwitchSpeed"
+                        android:text="@string/rdb_speed_mph" />
+
+                    <RadioButton
+                        android:id="@+id/speed_nmph"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onSwitchSpeed"
+                        android:text="@string/rdb_speed_nmph" />
+                </RadioGroup>
+            </RelativeLayout>
+        </ScrollView>
+    </RelativeLayout>
 
 </RelativeLayout>
