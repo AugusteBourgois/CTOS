@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,12 +27,15 @@ import java.io.IOException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import static com.ghost.ctos.GPSActivity.U_DIST;
+import static com.ghost.ctos.GPSActivity.U_TIME;
+import static com.ghost.ctos.MainActivity.PREFS_NAME;
+
 public class LogPositionService extends Service implements LocationListener {
 
     private NotificationManager mNM;
     private LocationManager lm;
     private int NOTIFICATION = R.string.service_start;
-    private static final String PREFS_NAME = "ctos_preference";
     NotificationCompat.Builder notification;
 
     private double latitude;
@@ -64,7 +68,7 @@ public class LogPositionService extends Service implements LocationListener {
         lm.removeUpdates(this);
         closeGPXFile();
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, LogPositionService.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("logging",false);
         editor.apply();
@@ -107,20 +111,14 @@ public class LogPositionService extends Service implements LocationListener {
     public void onStatusChanged(String provider, int status, Bundle extras) {}
 
     private void startLoggingService(){
-        PackageManager pm = this.getPackageManager();
-        int fine = pm.checkPermission(
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                this.getPackageName());
-        int sd_w = pm.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                this.getPackageName());
-        int sd_r = pm.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
-                this.getPackageName());
-        if (fine != PackageManager.PERMISSION_GRANTED) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, LogPositionService.MODE_PRIVATE);
+        int update = settings.getInt("update",0);
+        int dist_rate = settings.getInt("dist_rate",5);
+        int time_rate = settings.getInt("time_rate",2);
+        boolean fine = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        if (!fine) {
             Toast.makeText(this, R.string.error_permission_localisation, Toast.LENGTH_SHORT).show();
-            this.stopSelf();
-        }else if(sd_r != PackageManager.PERMISSION_GRANTED ||
-                sd_w != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, R.string.error_permission_storage, Toast.LENGTH_SHORT).show();
             this.stopSelf();
         }else if(!isSDW() || !isSDR()){
             Toast.makeText(this, R.string.error_availability_storage, Toast.LENGTH_SHORT).show();
@@ -128,11 +126,17 @@ public class LogPositionService extends Service implements LocationListener {
         }else{
             lm = (LocationManager) this.getSystemService(LOCATION_SERVICE);
             if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 60000, 0, this);
+                switch (update){
+                    case U_TIME:
+                        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, time_rate*1000, 0, this);
+                        break;
+                    case U_DIST:
+                        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, dist_rate, this);
+                        break;
+                }
             }
             showNotification();
             createGPXFile();
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("logging",true);
             editor.apply();

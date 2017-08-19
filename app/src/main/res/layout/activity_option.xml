@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ghost.ctos.OptionActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linear_layout"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+                <TextView
+                    android:id="@+id/textview_switch_format"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/textview_switch_format"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup_coord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textview_switch_format">
+
+                    <RadioButton
+                        android:id="@+id/lat_lon_ddd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onSwitchLatLon"
+                        android:text="@string/rdb_lat_lon_ddd" />
+
+                    <RadioButton
+                        android:id="@+id/lat_lon_dmm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onSwitchLatLon"
+                        android:text="@string/rdb_lat_lon_dmm" />
+
+                    <RadioButton
+                        android:id="@+id/lat_lon_dms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:onClick="onSwitchLatLon"
+                        android:text="@string/rdb_lat_lon_dms" />
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/textview_switch_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/radioGroup_coord"
+                    android:text="@string/textview_switch_speed"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"/>
+
+                <RadioGroup
+                    android:id="@+id/radioGroup_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textview_switch_speed">
+
+                    <RadioButton
+                        android:id="@+id/speed_ms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onSwitchSpeed"
+                        android:text="@string/rdb_speed_ms" />
+
+                    <RadioButton
+                        android:id="@+id/speed_kmh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:onClick="onSwitchSpeed"
+                        android:text="@string/rdb_speed_kmh" />
+
+                    <RadioButton
+                        android:id="@+id/speed_mph"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onSwitchSpeed"
+                        android:text="@string/rdb_speed_mph" />
+
+                    <RadioButton
+                        android:id="@+id/speed_nmph"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onSwitchSpeed"
+                        android:text="@string/rdb_speed_nmph" />
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/textview_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/textview_update"
+                    android:layout_below="@+id/radioGroup_speed"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"/>
+
+                <RadioGroup
+                    android:id="@+id/radioGroup_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textview_update">
+
+                    <RadioButton
+                        android:id="@+id/rdb_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:onClick="onSwitchUpdate"
+                        android:text="@string/rdb_time" />
+
+                    <RadioButton
+                        android:id="@+id/rdb_dist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onSwitchUpdate"
+                        android:text="@string/rdb_dist" />
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/textview_update_rate_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/radioGroup_update"
+                    android:text="@string/textview_rate_time"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="20dp"/>
+
+                <EditText
+                    android:id="@+id/rate_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/textview_update_rate_time"
+                    android:layout_alignParentEnd="true"
+                    android:ems="6"
+                    android:inputType="number" />
+
+                <TextView
+                    android:id="@+id/textview_update_rate_dist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rate_time"
+                    android:text="@string/textview_rate_dist"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="20dp"/>
+
+                <EditText
+                    android:id="@+id/rate_dist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/textview_update_rate_dist"
+                    android:layout_alignParentEnd="true"
+                    android:ems="6"
+                    android:inputType="number" />
+            </RelativeLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,9 +1,9 @@
 package com.ghost.ctos;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-public class VRActivity extends Activity {
+public class VRActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
