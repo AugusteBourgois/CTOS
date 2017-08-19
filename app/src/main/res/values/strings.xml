@@ -3,6 +3,7 @@
     <string name="title_activity_gps">Position logging and sharing</string>
     <string name="title_activity_vr">VR compass</string>
     <string name="title_activity_options">Settings</string>
+    <string name="title_activity_filemanager">Track files</string>
 
     <string name="error_permission">Please accept the permission requests</string>
     <string name="error_permission_localisation">Please allow this application to access your localisation.</string>
@@ -38,6 +39,15 @@
     <string name="rdb_time">Time-based</string>
     <string name="rdb_dist">Distance-based</string>
 
+    <string name="dialog_share">Share</string>
+    <string name="dialog_display">Open</string>
+    <string name="dialog_delete">Delete</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="send_file_to">Share file with &#8230;</string>
+    <string name="display_file">Open file with &#8230;</string>
+    <string name="delete_file_ok">File successfully deleted</string>
+    <string name="delete_file_nok">Impossible to delete the file</string>
+
     <string name="send_to">Share position with &#8230;</string>
     <string name="gmaps_url">https://maps.google.com/?q=%1$s,%2$s</string>
 
@@ -61,4 +71,5 @@
     and log it in a GPX file for further use.</string>
     <string name="vr_description">This activity is a Virtual Reality compass. It displays an artificial
     horizon on a video camera feed.</string>
+    <string name="title_activity_file_manager">FileManager</string>
 </resources>

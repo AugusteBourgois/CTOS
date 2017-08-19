@@ -26,9 +26,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import static com.ghost.ctos.GPSActivity.U_DIST;
 import static com.ghost.ctos.GPSActivity.U_TIME;
+import static com.ghost.ctos.MainActivity.PATH;
 import static com.ghost.ctos.MainActivity.PREFS_NAME;
 
 public class LogPositionService extends Service implements LocationListener {
@@ -173,7 +175,7 @@ public class LogPositionService extends Service implements LocationListener {
         lat = String.valueOf(latitude);
         lon = String.valueOf(longitude);
         alt = String.valueOf(altitude);
-        tm = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date(time));
+        tm = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",Locale.getDefault()).format(new Date(time));
         spd = String.valueOf(speed);
         return String.format(getResources().getString(R.string.gpx_trkpt),lon,lat,alt,tm,spd);
     }
@@ -182,7 +184,7 @@ public class LogPositionService extends Service implements LocationListener {
         File file;
         FileOutputStream outputStream;
         try {
-            file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), filename);
+            file = new File(Environment.getExternalStoragePublicDirectory(PATH), filename);
             outputStream = new FileOutputStream(file, true);
             outputStream.write(data.getBytes());
             outputStream.close();
@@ -192,12 +194,12 @@ public class LogPositionService extends Service implements LocationListener {
     }
 
     private void createGPXFile(){
-        String currentDateTimeString = new SimpleDateFormat("yyyy-MM-dd'_'HH:mm:ss").format(new Date());
+        String currentDateTimeString = new SimpleDateFormat("yyyy-MM-dd'_'HH:mm:ss", Locale.getDefault()).format(new Date());
         filename = getResources().getString(R.string.filename)+currentDateTimeString+".gpx";
         File file;
         FileOutputStream outputStream;
         try {
-            file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), filename);
+            file = new File(Environment.getExternalStoragePublicDirectory(PATH), filename);
             outputStream = new FileOutputStream(file, true);
             outputStream.write(getResources().getString(R.string.gpx_header).getBytes());
             outputStream.close();
@@ -210,7 +212,7 @@ public class LogPositionService extends Service implements LocationListener {
         File file;
         FileOutputStream outputStream;
         try {
-            file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), filename);
+            file = new File(Environment.getExternalStoragePublicDirectory(PATH), filename);
             outputStream = new FileOutputStream(file, true);
             outputStream.write(getResources().getString(R.string.gpx_footer).getBytes());
             outputStream.close();

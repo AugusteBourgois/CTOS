@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.util.Locale;
+
 import static com.ghost.ctos.GPSActivity.DDD;
 import static com.ghost.ctos.GPSActivity.DMM;
 import static com.ghost.ctos.GPSActivity.DMS;
@@ -36,7 +38,7 @@ public class OptionActivity extends AppCompatActivity {
 
         final EditText rate_time   = (EditText)findViewById(R.id.rate_time);
         final EditText rate_dist   = (EditText)findViewById(R.id.rate_dist);
-        rate_time.addTextChangedListener(new TextWatcher() {
+        if(rate_time!=null) rate_time.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
@@ -56,7 +58,7 @@ public class OptionActivity extends AppCompatActivity {
             }
         });
 
-        rate_dist.addTextChangedListener(new TextWatcher() {
+        if(rate_dist!=null) rate_dist.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
@@ -89,13 +91,13 @@ public class OptionActivity extends AppCompatActivity {
         time_rate = settings.getInt("time_rate",2);
 
         EditText rate_time   = (EditText)findViewById(R.id.rate_time);
-        rate_time.setText(Integer.toString(time_rate));
+        if(rate_time!=null) rate_time.setText(String.format(Locale.getDefault(),"%d",time_rate));
 
         EditText rate_dist   = (EditText)findViewById(R.id.rate_dist);
-        rate_dist.setText(Integer.toString(dist_rate));
+        if(rate_dist!=null) rate_dist.setText(String.format(Locale.getDefault(),"%d",dist_rate));
 
         RadioGroup g1 = (RadioGroup)findViewById(R.id.radioGroup_coord);
-        switch(format){
+        if (g1!=null) switch(format){
             case DDD:
                 g1.check(R.id.lat_lon_ddd);
                 break;
@@ -108,7 +110,7 @@ public class OptionActivity extends AppCompatActivity {
         }
 
         RadioGroup g2 = (RadioGroup)findViewById(R.id.radioGroup_speed);
-        switch(unit){
+        if(g2!=null) switch(unit){
             case MS:
                 g2.check(R.id.speed_ms);
                 break;
@@ -124,16 +126,16 @@ public class OptionActivity extends AppCompatActivity {
         }
 
         RadioGroup g3 = (RadioGroup)findViewById(R.id.radioGroup_update);
-        switch(update){
+        if(g3!=null) switch(update){
             case U_TIME:
                 g3.check(R.id.rdb_time);
-                rate_time.setEnabled(true);
-                rate_dist.setEnabled(false);
+                if(rate_time!=null) rate_time.setEnabled(true);
+                if(rate_dist!=null) rate_dist.setEnabled(false);
                 break;
             case U_DIST:
                 g3.check(R.id.rdb_dist);
-                rate_time.setEnabled(false);
-                rate_dist.setEnabled(true);
+                if(rate_time!=null) rate_time.setEnabled(false);
+                if(rate_dist!=null) rate_dist.setEnabled(true);
                 break;
         }
     }
@@ -203,16 +205,18 @@ public class OptionActivity extends AppCompatActivity {
         // Switch between the 3 display modes
         switch(view.getId()) {
             case R.id.rdb_time:
-                if (checked)
+                if (checked) {
                     update = U_TIME;
-                    rate_time.setEnabled(true);
-                    rate_dist.setEnabled(false);
+                    if (rate_time != null) rate_time.setEnabled(true);
+                    if (rate_dist != null) rate_dist.setEnabled(false);
+                }
                 break;
             case R.id.rdb_dist:
-                if (checked)
+                if (checked) {
                     update = U_DIST;
-                    rate_time.setEnabled(false);
-                    rate_dist.setEnabled(true);
+                    if (rate_time != null) rate_time.setEnabled(false);
+                    if (rate_dist != null) rate_dist.setEnabled(true);
+                }
                 break;
         }
         // Save the current settings for later use

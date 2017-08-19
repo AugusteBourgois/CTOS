@@ -8,9 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -25,9 +23,9 @@ import android.widget.Toast;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import static com.ghost.ctos.MainActivity.PREFS_NAME;
-
 
 public class GPSActivity extends AppCompatActivity implements LocationListener {
 
@@ -75,31 +73,23 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
         // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
+        if(ab!=null) ab.setDisplayHomeAsUpEnabled(true);
 
         // Store the context for later use in objects
         context = this;
 
         // Implement the second button to open the tracks directory
         final Button button1 = (Button) findViewById(R.id.button_open);
-        button1.setOnClickListener(new View.OnClickListener() {
+        if(button1!=null) button1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Uri selectedUri = Uri.parse(Environment.DIRECTORY_DOCUMENTS);
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setDataAndType(selectedUri, "resource/file");
-                if (intent.resolveActivityInfo(getPackageManager(), 0) != null){
-                    startActivity(intent);
-                }else{
-                    String msg = getResources().getString(R.string.error_file_explorer);
-                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = new Intent(context, FileManager.class);
+                startActivity(intent);
             }
         });
 
         // Implement the second button to share location
         final Button button2 = (Button) findViewById(R.id.button_share);
-        button2.setOnClickListener(new View.OnClickListener() {
+        if(button2!=null) button2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Create the GMaps compatible message
                 String lat, lon, message;
@@ -117,8 +107,8 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
 
         // Implement the third button to log locations
         final Button button3 = (Button) findViewById(R.id.button_log);
-        button3.setText(getResources().getString(R.string.button_log_on));
-        button3.setOnClickListener(new View.OnClickListener() {
+        if(button3!=null) button3.setText(getResources().getString(R.string.button_log_on));
+        if(button3!=null) button3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Start or stop logging service depending on the latter's state
                 SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, GPSActivity.MODE_PRIVATE);
@@ -156,9 +146,9 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
 
         Button button3 = (Button)findViewById(R.id.button_log);
         if(logging){
-            button3.setText(getResources().getString(R.string.button_log_off));
+            if(button3!=null) button3.setText(getResources().getString(R.string.button_log_off));
         }else{
-            button3.setText(getResources().getString(R.string.button_log_on));
+            if(button3!=null) button3.setText(getResources().getString(R.string.button_log_on));
         }
 
         // Initialize the location manager
@@ -272,21 +262,21 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
         spe="";
         switch (unit) {
             case MS:
-                spe = String.valueOf(speed)+" m/s";
+                spe = String.format(Locale.getDefault(),"%.2f",speed)+" m/s";
                 break;
             case KMH:
-                spe = String.valueOf(speed*KMH_U)+" km/h";
+                spe = String.format(Locale.getDefault(),"%.2f",speed*KMH_U)+" km/h";
                 break;
             case MPH:
-                spe = String.valueOf(speed*MPH_U)+" mph";
+                spe = String.format(Locale.getDefault(),"%.2f",speed*MPH_U)+" mph";
                 break;
             case NMPH:
-                spe = String.valueOf(speed*NMPH_U)+" knots";
+                spe = String.format(Locale.getDefault(),"%.2f",speed*NMPH_U)+" knots";
                 break;
         }
         alt = String.valueOf(altitude)+" m";
         acc = String.valueOf(h_accuracy)+" m";
-        dte = new SimpleDateFormat("h:mm a dd.MM.yyyy").format(new Date(time));
+        dte = new SimpleDateFormat("h:mm a dd.MM.yyyy",Locale.getDefault()).format(new Date(time));
         String result = String.format(getResources().getString(R.string.textview_result), lat, lon, acc, alt, spe, dte);
         textview_result.setText(result);
     }

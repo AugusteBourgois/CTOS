@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.content.Context;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,13 +17,11 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     public static final String PREFS_NAME = "ctos_preference";
+    public static String PATH = Environment.DIRECTORY_DOCUMENTS;
 
     private Context context;
     private boolean perm_gps_act;
     private boolean perm_cam_act;
-
-    private Button gps_act;
-    private Button cam_act;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         checkActivityPermissions();
 
-        gps_act = (Button) findViewById(R.id.button_gps);
-        gps_act.setOnClickListener(new View.OnClickListener() {
+        Button gps_act = (Button) findViewById(R.id.button_gps);
+        if(gps_act!=null) gps_act.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(perm_gps_act) {
                     Intent intent = new Intent(context, GPSActivity.class);
@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        cam_act = (Button) findViewById(R.id.button_vr);
-        cam_act.setOnClickListener(new View.OnClickListener() {
+        Button cam_act = (Button) findViewById(R.id.button_vr);
+        if(cam_act!=null) cam_act.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(perm_cam_act) {
                     Intent intent = new Intent(context, VRActivity.class);
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Triggered by the requestPermissions function, when the user has answered
     @Override
-    public void onRequestPermissionsResult(int permsRequestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int permsRequestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (permsRequestCode) {
             case 200:
                 boolean fine = grantResults[0] == PackageManager.PERMISSION_GRANTED;

@@ -22,7 +22,21 @@
             android:label="@string/title_activity_vr"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".OptionActivity"
+            android:label="@string/title_activity_options"
+            android:launchMode="singleTop"
+            android:parentActivityName=".GPSActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".FileManager"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_filemanager"
+            android:parentActivityName=".GPSActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
@@ -40,13 +54,6 @@
             android:name=".LogPositionService"
             android:enabled="true"
             android:exported="false" />
-
-        <activity android:name=".OptionActivity"
-            android:label="@string/title_activity_options"
-            android:launchMode="singleTop"
-            android:parentActivityName=".GPSActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>
