@@ -3,8 +3,12 @@
     package="com.ghost.ctos">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera2.full" />
+    <uses-feature android:name="android.hardware.location.gps" />
 
     <application
         android:allowBackup="true"
@@ -17,12 +21,15 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
-            android:name=".VRActivity"
-            android:label="@string/title_activity_vr"
+            android:name=".AssistedGPSActivity"
+            android:label="@string/title_activity_agps"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".OptionActivity"
             android:label="@string/title_activity_options"
@@ -30,6 +37,7 @@
             android:parentActivityName=".GPSActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".FileManager"
             android:launchMode="singleTop"
@@ -37,6 +45,7 @@
             android:parentActivityName=".GPSActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
@@ -45,7 +54,6 @@
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -54,6 +62,7 @@
             android:name=".LogPositionService"
             android:enabled="true"
             android:exported="false" />
+
     </application>
 
 </manifest>

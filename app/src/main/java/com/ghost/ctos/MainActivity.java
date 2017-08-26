@@ -45,11 +45,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button cam_act = (Button) findViewById(R.id.button_vr);
+        Button cam_act = (Button) findViewById(R.id.button_agps);
         if(cam_act!=null) cam_act.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(perm_cam_act) {
-                    Intent intent = new Intent(context, VRActivity.class);
+                    Intent intent = new Intent(context, AssistedGPSActivity.class);
                     startActivity(intent);
                 }else{
                     String msg = getResources().getString(R.string.error_permission);
@@ -68,13 +68,17 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean sd_r = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-        if (!fine || !sd_r || !sd_w) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+        boolean cam = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+        if (!fine || !sd_r || !sd_w || !cam) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 200);
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA}, 200);
         }
         perm_gps_act = fine && sd_r && sd_w;
-        perm_cam_act = true;
+        perm_cam_act = fine && sd_w && cam;
     }
 
     // Triggered by the requestPermissions function, when the user has answered
@@ -85,8 +89,9 @@ public class MainActivity extends AppCompatActivity {
                 boolean fine = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                 boolean sd_r = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                 boolean sd_w = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                boolean cam = grantResults[3] == PackageManager.PERMISSION_GRANTED;
                 perm_gps_act = fine && sd_r && sd_w;
-                perm_cam_act = true;
+                perm_cam_act = fine && sd_w && cam;
                 break;
         }
     }

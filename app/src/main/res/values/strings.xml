@@ -1,7 +1,7 @@
 <resources>
     <string name="title_activity_main">CTOS</string>
     <string name="title_activity_gps">Position logging and sharing</string>
-    <string name="title_activity_vr">VR compass</string>
+    <string name="title_activity_agps">Assisted GPS</string>
     <string name="title_activity_options">Settings</string>
     <string name="title_activity_filemanager">Track files</string>
 
@@ -65,11 +65,10 @@
         &lt;time&gt;%4$s&lt;/time&gt;\n\t\t\t\t
         &lt;speed&gt;%5$s&lt;/speed&gt;\n\t\t\t
         &lt;/trkpt&gt;</string>
-    <string name="filename">CTOS_track_</string>
+    <string name="filename_track">CTOS_track_</string>
 
     <string name="gps_description">This activity enables you to read your positioning data, share it,
     and log it in a GPX file for further use.</string>
-    <string name="vr_description">This activity is a Virtual Reality compass. It displays an artificial
-    horizon on a video camera feed.</string>
-    <string name="title_activity_file_manager">FileManager</string>
+    <string name="agps_description">This activity is improves the GPS localisation when there is no
+    reception and displays it on a map.</string>
 </resources>

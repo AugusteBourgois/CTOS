@@ -56,7 +56,7 @@ public class GPSActivity extends AppCompatActivity implements LocationListener {
     public static final int NMPH = 3;
     public static final double KMH_U = 3.6;
     public static final double MPH_U = 3600/1609.344;
-    public static final double NMPH_U = 3600/1852;
+    public static final double NMPH_U = 3600/1852.0;
 
     TextView textview_result;
 
